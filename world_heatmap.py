@@ -20,14 +20,17 @@ geo_df = gpd.read_file(SHAPEFILE)[['ADMIN', 'ADM0_A3', 'geometry']]
 geo_df.columns = ['country', 'country_code', 'geometry']
 
 # Drop Antarctica
-geo_df = geo_df[geo_df['country'] != 'Antarctica']
+# geo_df = geo_df[geo_df['country'] != 'Antarctica']
 
 # Merge GeoDataFrame with COVID-19 data
 merged_geo_df = geo_df.merge(location_df, left_on='country', right_on='Country_Region')
 
+desired_min = -180
+desired_max = 180  # Change this to your desired maximum value
+
 
 # Plotting
 fig, ax = plt.subplots(figsize=(20, 8))
-merged_geo_df.plot(column='Confirmed', ax=ax, linewidth=1, cmap='viridis', legend=True, legend_kwds={'label': "Confirmed Cases"})
-ax.set_title('Daily COVID-19 Deaths', fontdict={'fontsize': '25', 'fontweight': '3'})
+merged_geo_df.plot(column='Long_', ax=ax, linewidth=1, cmap='viridis', legend=True, legend_kwds={'label': "Longitude"}, vmin=desired_min, vmax=desired_max)
+ax.set_title('Longitude by Country Representation', fontdict={'fontsize': '25', 'fontweight': '3'})
 plt.show()
