@@ -6,6 +6,16 @@ import matplotlib.pyplot as plt
 import country_converter as coco
 from datetime import datetime, timedelta
 
+def plot_bar_chart(x_values, y_values, x_label, y_label, title):
+    plt.figure(figsize=(10, 6))
+    plt.bar(x_values, y_values, color='skyblue')
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.title(title)
+    plt.xticks(rotation=90)
+    plt.tight_layout()
+    plt.show()
+
 df = pd.read_csv('dataset/location_2021.csv')
 
 cases_df = pd.read_csv('dataset/cases_2021_test.csv')
@@ -84,19 +94,28 @@ plt.show()
 #-----(PROVINCES WITH HIGHEST FATALITY RATE)---------- (FIX ISSUE WITH UNKNOWN CASE!!)
 
 
+# df['Fatality_Ratio'] = (df['Deaths'] / df['Confirmed']) * 100
+
+# country_fatality = df.groupby('Province_State')['Fatality_Ratio'].mean().reset_index()
+# country_fatality = country_fatality.sort_values(by='Fatality_Ratio', ascending=False).head(15)
+
+# plt.figure(figsize=(10, 6))
+# plt.bar(country_fatality['Province_State'], country_fatality['Fatality_Ratio'], color='skyblue')
+# plt.xlabel('Country')
+# plt.ylabel('Fatality Ratio (%)')
+# plt.title('Top 15 Provinces with Highest Fatality Ratios to Confirmed Cases')
+# plt.xticks(rotation=90)
+# plt.tight_layout()
+# plt.show()
+
 df['Fatality_Ratio'] = (df['Deaths'] / df['Confirmed']) * 100
 
+# Group by Province_State and calculate mean Fatality Ratio
 country_fatality = df.groupby('Province_State')['Fatality_Ratio'].mean().reset_index()
 country_fatality = country_fatality.sort_values(by='Fatality_Ratio', ascending=False).head(15)
 
-plt.figure(figsize=(10, 6))
-plt.bar(country_fatality['Province_State'], country_fatality['Fatality_Ratio'], color='skyblue')
-plt.xlabel('Country')
-plt.ylabel('Fatality Ratio (%)')
-plt.title('Top 15 Provinces with Highest Fatality Ratios to Confirmed Cases')
-plt.xticks(rotation=90)
-plt.tight_layout()
-plt.show()
+# Call the function
+plot_bar_chart(country_fatality['Province_State'], country_fatality['Fatality_Ratio'], 'Country', 'Fatality Ratio (%)', 'Top 15 Provinces with Highest Fatality Ratios to Confirmed Cases')
 
 
 # #-----(COUNTRIES WITH HIGHEST INCIDENT RATE)----------
@@ -106,14 +125,19 @@ df_sorted = df.sort_values(by='Incident_Rate', ascending=False)
 
 top_15_countries = df_sorted.head(15)
 
-plt.figure(figsize=(10, 6))
-plt.bar(top_15_countries['Country_Region'], top_15_countries['Incident_Rate'], color='skyblue')
-plt.xlabel('Country')
-plt.ylabel('Incidence Rate')
-plt.title('Top 15 Countries with Highest Incidence Rates')
-plt.xticks(rotation=90)
-plt.tight_layout()
-plt.show()
+# plt.figure(figsize=(10, 6))
+# plt.bar(top_15_countries['Country_Region'], top_15_countries['Incident_Rate'], color='skyblue')
+# plt.xlabel('Country')
+# plt.ylabel('Incidence Rate')
+# plt.title('Top 15 Countries with Highest Incidence Rates')
+# plt.xticks(rotation=90)
+# plt.tight_layout()
+# plt.show()
+
+
+plot_bar_chart(top_15_countries['Country_Region'], top_15_countries['Incident_Rate'], 'Country', 'Incidence Rate', 'Top 15 Countries with Highest Incidence Rates')
+
+
 
 #-----(PROVINCES WITH HIGHEST INCIDENT RATE)----------
 
