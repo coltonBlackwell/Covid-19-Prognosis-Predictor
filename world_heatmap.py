@@ -19,8 +19,6 @@ SHAPEFILE = 'shapefiles/worldmap/ne_10m_admin_0_countries.shp'
 geo_df = gpd.read_file(SHAPEFILE)[['ADMIN', 'ADM0_A3', 'geometry']]
 geo_df.columns = ['country', 'country_code', 'geometry']
 
-# Drop Antarctica
-# geo_df = geo_df[geo_df['country'] != 'Antarctica']
 
 # Merge GeoDataFrame with COVID-19 data
 merged_geo_df = geo_df.merge(location_df, left_on='country', right_on='Country_Region')
