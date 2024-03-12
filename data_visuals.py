@@ -31,6 +31,23 @@ plt.xticks(rotation=90)
 plt.tight_layout()
 plt.show()
 
+#-----(PROVINCES WITH THE MOST CONFIRMED CASES)----------
+
+grouped_df = df.groupby('Province_State')['Confirmed'].sum().reset_index()
+
+sorted_df = grouped_df.sort_values(by='Confirmed', ascending=False)
+
+top_15_provinces = sorted_df.head(15)
+
+plt.figure(figsize=(10, 6))
+plt.bar(top_15_provinces['Province_State'], top_15_provinces['Confirmed'], color='skyblue')
+plt.xlabel('Country')
+plt.ylabel('Confirmed Cases')
+plt.title('Top 15 Provinces with Most Confirmed Cases')
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
+
 
 # #-----(COUNTRIES WITH THE MOST DEATHS)----------
 
@@ -103,7 +120,7 @@ plt.show()
 
 df_sorted = df.sort_values(by='Incident_Rate', ascending=False)
 
-top_15_provinces = df_sorted.head(15)
+top_15_provinces = df_sorted.head(22)
 
 plt.figure(figsize=(10, 6))
 plt.bar(top_15_provinces['Province_State'], top_15_provinces['Incident_Rate'], color='skyblue')
