@@ -23,10 +23,14 @@ cases_test = cases_test.fillna({'age': -1, 'sex': -1})
 
 #----------- (REMOVING OUTLIERS)-----------
 
+# Convert 'age' column to numeric type, coerce errors to NaN
+cases_data['age'] = pd.to_numeric(cases_data['age'], errors='coerce')
+cases_test['age'] = pd.to_numeric(cases_test['age'], errors='coerce')
 
 # - Remove unlikely ages from dataset
 
-
+cases_data = cases_data[(cases_data['age'] >= 0) & (cases_data['age'] < 105)]
+cases_test = cases_test[(cases_test['age'] >= 0) & (cases_test['age'] < 105)]
 
 # - Remove if province is unknown - The long and lat is missing
 location_data = location_data.dropna(subset=['Lat', 'Long_'], how='any')

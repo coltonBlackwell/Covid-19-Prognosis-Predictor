@@ -109,6 +109,3 @@ cbar = plt.colorbar(sm)
 cbar.set_label('Number of Active Cases')
 
 plt.show()
-
-#-----(DATA PREPROCESSING)----------
-
