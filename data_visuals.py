@@ -90,83 +90,24 @@ plt.title('Distribution of COVID-19 Cases by Gender')
 plt.axis('equal')
 plt.show()
 
-#------------------------------------
+#-----(HEATMAP OF CONFIRMED CASES)----------
 
 plt.figure(figsize=(20, 10))
-plt.title('Heat Map of Confirmed clear Cases')
+plt.title('Heat Map of Confirmed Cases')
 
-# Assuming merged_df is already defined
 scatter_sizes = location_df['Confirmed']**0.5
-
-# Normalizing sizes to be in range [0, 1]
-# norm = mcolors.Normalize(vmin=location_df['Active'].min(), vmax=location_df['Active'].max())
 norm = mcolors.Normalize(0, 100000)
 normalized_sizes = norm(scatter_sizes)
-
-# Plotting the scatter plot with normalized sizes
 scatter_generator = plt.scatter(x=location_df['Long_'], y=location_df['Lat'], s=scatter_sizes, c=normalized_sizes, cmap='viridis', alpha=0.5)
 
 plt.xlabel('Longitude')
 plt.ylabel('Latitude')
 
-# Custom legend creation
 sm = plt.cm.ScalarMappable(cmap='viridis', norm=norm)
 sm.set_array([])
 cbar = plt.colorbar(sm)
 cbar.set_label('Number of Active Cases')
 
-# Saving the plot as a PNG file
 plt.savefig('WorldHeatMap.png')
 
-# Displaying the plot
 plt.show()
-
-# # Read location and cases data
-# location_df = pd.read_csv("dataset/location_2021.csv")
-# cases_df = pd.read_csv("dataset/cases_2021_test.csv")
-
-# cases_df.fillna(0, inplace=True)  # Replace missing values in cases dataset with 0
-# location_df.fillna(0, inplace=True)  # Replace missing values in location dataset with 0
-
-
-# # Merge location and cases data
-# merged_df = pd.merge(cases_df, location_df, how="inner", left_on=["country", "province"], right_on=["Country_Region", "Province_State"])
-
-# # Calculate Expected Mortality Rate
-# # merged_df["Expected_Mortality_Rate"] = merged_df["Deaths"] / merged_df["Confirmed"]
-
-# # Group by country and calculate total deaths and total confirmed cases
-# country_stats = merged_df.groupby('country').agg({'Deaths': 'sum', 'Confirmed': 'sum'})
-
-# # Calculate Expected Mortality Rate per country
-# country_stats['Expected_Mortality_Rate'] = country_stats['Deaths'] / country_stats['Confirmed']
-
-# # Display the results
-# print(country_stats)
-
-# merged_df = pd.merge(merged_df, country_stats[['Expected_Mortality_Rate']], how='left', left_on='country', right_index=True)
-
-
-# # Read shapefile
-# SHAPEFILE = 'shapefiles/worldmap/ne_10m_admin_0_countries.shp'
-# geo_df = gpd.read_file(SHAPEFILE)[['ADMIN', 'ADM0_A3', 'geometry']]
-# geo_df.columns = ['country', 'country_code', 'geometry']
-
-
-# # Merge GeoDataFrame with COVID-19 data
-# merged_geo_df = geo_df.merge(merged_df, left_on='country', right_on='Country_Region')
-
-# print(merged_geo_df)
-
-# print(merged_geo_df.columns)
-
-
-
-# desired_min = 0
-# desired_max = 180  # Change this to your desired maximum value
-
-# # Plotting
-# fig, ax = plt.subplots(figsize=(20, 8))
-# merged_df.plot(column='Long_', ax=ax, linewidth=1, cmap='viridis', legend=True, legend_kwds={'label': "Longitude"}, vmin=desired_min, vmax=desired_max)
-# ax.set_title('Longitude by Country Representation', fontdict={'fontsize': '25', 'fontweight': '3'})
-# plt.show()
