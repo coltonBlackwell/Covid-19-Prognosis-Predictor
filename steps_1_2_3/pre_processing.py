@@ -8,13 +8,30 @@ cases_test = pd.read_csv('../dataset/cases_2021_test.csv')
 location_data = pd.read_csv('../dataset/location_2021.csv')
 
 
+# - Remove the LAST_UPDATE column, it doesnt addmuch 
+location_data = location_data.drop(['Last_Update'], axis=1)
 
+
+# - REplace age/sex with -1
+cases_data = cases_data.fillna({'age': -1, 'sex': -1})
+cases_test = cases_test.fillna({'age': -1, 'sex': -1})
+
+
+# Specify columns where you want to check for unknown values
+columns_to_check = ['column1', 'column2', 'column3']
+
+# - Remove if province is unknown - The long and lat is missing
+location_data = location_data.dropna(subset=['Lat', 'Long_'], how='any')
 
 #----------- (HANDLE MISSING VALUES BELOW!!)-----------
-cases_data.fillna(0, inplace=True)
-cases_test.fillna(0, inplace=True)
 
-#----------- (Merge the processed dataframes)-----------
+#outliers 
+# - Age
+# - Lat/Long
+# cases_data.fillna(0, inplace=True)
+# cases_test.fillna(0, inplace=True)
+
+#----------- (Merge the processed dataframes && join created Expected_Mortality_Rate)-----------
 join_train = cases_data.merge(location_data, left_on=['province', 'country'], right_on=['Province_State', 'Country_Region'], how='inner')
 join_test = cases_test.merge(location_data, left_on=['province', 'country'], right_on=['Province_State', 'Country_Region'], how='inner')
 
