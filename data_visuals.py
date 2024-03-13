@@ -32,31 +32,25 @@ sorted_df = grouped_df.sort_values(by='Confirmed', ascending=False)
 
 top_15_countries = sorted_df.head(15)
 
-plt.figure(figsize=(10, 6))
-plt.bar(top_15_countries['Country_Region'], top_15_countries['Confirmed'], color='skyblue')
-plt.xlabel('Country')
-plt.ylabel('Confirmed Cases')
-plt.title('Top 15 Countries with Most Confirmed Cases')
-plt.xticks(rotation=90)
-plt.tight_layout()
-plt.show()
+# plt.figure(figsize=(10, 6))
+# plt.bar(top_15_countries['Country_Region'], top_15_countries['Confirmed'], color='skyblue')
+# plt.xlabel('Country')
+# plt.ylabel('Confirmed Cases')
+# plt.title('Top 15 Countries with Most Confirmed Cases')
+# plt.xticks(rotation=90)
+# plt.tight_layout()
+# plt.show()
+
+plot_bar_chart(top_15_countries['Country_Region'], top_15_countries['Confirmed'], 'Country', 'Confirmed Cases', 'Top 15 Countries with Most Confirmed Cases')
+
 
 #-----(PROVINCES WITH THE MOST CONFIRMED CASES)----------
 
 grouped_df = df.groupby('Province_State')['Confirmed'].sum().reset_index()
-
 sorted_df = grouped_df.sort_values(by='Confirmed', ascending=False)
-
 top_15_provinces = sorted_df.head(15)
 
-plt.figure(figsize=(10, 6))
-plt.bar(top_15_provinces['Province_State'], top_15_provinces['Confirmed'], color='skyblue')
-plt.xlabel('Country')
-plt.ylabel('Confirmed Cases')
-plt.title('Top 15 Provinces with Most Confirmed Cases')
-plt.xticks(rotation=90)
-plt.tight_layout()
-plt.show()
+plot_bar_chart(top_15_provinces['Province_State'], top_15_provinces['Confirmed'], 'Province', 'Confirmed Cases', 'Top 15 Provinces with Most Confirmed Cases')
 
 
 # #-----(COUNTRIES WITH THE MOST DEATHS)----------
