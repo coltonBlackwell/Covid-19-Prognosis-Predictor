@@ -32,6 +32,14 @@ cases_test['age'] = pd.to_numeric(cases_test['age'], errors='coerce')
 cases_data = cases_data[(cases_data['age'] >= 0) & (cases_data['age'] < 105)]
 cases_test = cases_test[(cases_test['age'] >= 0) & (cases_test['age'] < 105)]
 
+# - Remove unlikely Long/Lat from dataset
+
+cases_data = cases_data[(cases_data['latitude'] >= -90) & (cases_data['latitude'] < 90)]
+cases_data = cases_data[(cases_data['longitude'] >= -180) & (cases_data['longitude'] < 180)]
+cases_test = cases_test[(cases_test['longitude'] >= -180) & (cases_test['longitude'] < 180)]
+cases_test = cases_test[(cases_test['latitude'] >= -90) & (cases_test['latitude'] < 90)] 
+
+
 # - Remove if province is unknown - The long and lat is missing
 location_data = location_data.dropna(subset=['Lat', 'Long_'], how='any')
 
