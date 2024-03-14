@@ -58,3 +58,6 @@ join_test.drop(columns_to_drop, axis=1, inplace=True)
 
 join_train.to_csv('../dataset/case_train_processed.csv', index=False)
 join_test.to_csv('../dataset/case_test_processed.csv', index=False)
+
+
+#NOTES ABOUT FEATURE SELECTION
