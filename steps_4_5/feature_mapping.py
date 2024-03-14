@@ -51,13 +51,20 @@ cases_test['country_code'] = cases_test['country'].cat.codes
 X = cases_data.drop(['outcome_group'], axis=1)
 y = cases_data['outcome_group']
 
+# print("Imbalanced class before: ", y.value_counts())
+
 min_samples = min(cases_data['outcome_group'].value_counts())
 
 rus = RandomUnderSampler(sampling_strategy={'hospitalized': min_samples, 'nonhospitalized': min_samples, 'deceased': min_samples})
 
 X_res, y_res = rus.fit_resample(X, y)
 
+# print("Balanced class after: ", y_res.value_counts()) IMPORTANT for report
+
+
 # Concatenate X_res and y_res column-wise
 resampled_data = pd.concat([X_res, pd.DataFrame(y_res, columns=['outcome_group'])], axis=1)
 
 resampled_data.to_csv('../dataset/subset/undersampled_processed_data.csv', index=False)  # Save resulting file to resampled_data.csv 
+
+#Use undersampled_processed_data.csv for your models in step 6 !!
