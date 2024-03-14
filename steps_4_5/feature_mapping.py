@@ -60,4 +60,4 @@ X_res, y_res = rus.fit_resample(X, y)
 # Concatenate X_res and y_res column-wise
 resampled_data = pd.concat([X_res, pd.DataFrame(y_res, columns=['outcome_group'])], axis=1)
 
-resampled_data.to_csv('resampled_data.csv', index=False)  # Save resulting file to resampled_data.csv 
+resampled_data.to_csv('../dataset/subset/undersampled_processed_data.csv', index=False)  # Save resulting file to resampled_data.csv 
