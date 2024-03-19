@@ -5,9 +5,9 @@ import os
 #----------- (SCANNING FILES)-----------
 
 
-cases_data = pd.read_csv('../dataset/cases_2021_train.csv')
-cases_test = pd.read_csv('../dataset/cases_2021_test.csv')
-location_data = pd.read_csv('../dataset/location_2021.csv')
+cases_data = pd.read_csv('../data/cases_2021_train.csv')
+cases_test = pd.read_csv('../data/cases_2021_test.csv')
+location_data = pd.read_csv('../data/location_2021.csv')
 
 
 #----------- (DATA CLEANING)-----------
@@ -56,8 +56,8 @@ columns_to_drop = ['Lat', 'Long_', 'Province_State', 'Country_Region']
 join_train.drop(columns_to_drop, axis=1, inplace=True)
 join_test.drop(columns_to_drop, axis=1, inplace=True)
 
-join_train.to_csv('../dataset/case_train_processed.csv', index=False)
-join_test.to_csv('../dataset/case_test_processed.csv', index=False)
+join_train.to_csv('../results/case_train_processed.csv', index=False)
+join_test.to_csv('../results/case_test_processed.csv', index=False)
 
 
 #NOTES ABOUT FEATURE SELECTION

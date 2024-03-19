@@ -14,10 +14,10 @@ def plot_bar_chart(x_values, y_values, x_label, y_label, title):
     plt.tight_layout()
     plt.show()
 
-df = pd.read_csv('../dataset/location_2021.csv')
+df = pd.read_csv('../data/location_2021.csv')
 
-cases_df = pd.read_csv('../dataset/cases_2021_test.csv')
-location_df = pd.read_csv('../dataset/location_2021.csv')
+cases_df = pd.read_csv('../data/cases_2021_test.csv')
+location_df = pd.read_csv('../data/location_2021.csv')
 merged_df = pd.merge(cases_df, location_df, how='inner', left_on=['country', 'province'], right_on=['Country_Region', 'Province_State'])
 
 
