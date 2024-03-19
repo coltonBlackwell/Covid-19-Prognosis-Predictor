@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import os
 from imblearn.under_sampling import RandomUnderSampler # Make sure to run pip install -U imbalanced-learn to run
 
 cases_data = pd.read_csv('../data/cases_2021_train_processed_2 - cases_2021_train_processed_2.csv')
