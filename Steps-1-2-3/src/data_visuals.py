@@ -56,7 +56,6 @@ plot_bar_chart(top_15_provinces['Province_State'], top_15_provinces['Incident_Ra
 # #-----(COUNTRIES WITH HIGHEST INCIDENT RATE)----------
 
 
-
 plt.figure(figsize=(20, 10))
 plt.title('Heat Map of Countries with the highest Incident rates')
 
@@ -68,18 +67,18 @@ scatter_sizes = location_df['Incident_Rate']**0.5
 norm = mcolors.Normalize(1000, 20000)
 normalized_sizes = norm(scatter_sizes)
 
-# Basemap scatterplot for confirmed cases
+# Basemap scatterplot
 x, y = m(location_df['Long_'].values, location_df['Lat'].values)
 scatter_generator = m.scatter(x, y, s=scatter_sizes, c=normalized_sizes, cmap='viridis', alpha=0.5)
 
 plt.xlabel('Longitude')
 plt.ylabel('Latitude')
 
-# Colorbar
+# Colorbar with explicit axis specified
 sm = plt.cm.ScalarMappable(cmap='viridis', norm=norm)
 sm.set_array([])
-cbar = plt.colorbar(sm)
-cbar.set_label('Incident_Rate')
+cbar = plt.colorbar(sm, ax=plt.gca())  # Explicitly specify the axis using ax=plt.gca()
+cbar.set_label('Incident Rate')
 
 plt.show()
 
@@ -119,10 +118,10 @@ scatter_generator = m.scatter(x, y, s=scatter_sizes, c=normalized_sizes, cmap='v
 plt.xlabel('Longitude')
 plt.ylabel('Latitude')
 
-# Colorbar
+# Colorbar with explicit axis specified
 sm = plt.cm.ScalarMappable(cmap='viridis', norm=norm)
 sm.set_array([])
-cbar = plt.colorbar(sm)
+cbar = plt.colorbar(sm, ax=plt.gca())  # Explicitly specify the axis using ax=plt.gca()
 cbar.set_label('Number of Confirmed Cases')
 
 plt.show()
@@ -147,10 +146,10 @@ scatter_generator = m.scatter(x, y, s=scatter_sizes, c=normalized_sizes, cmap='v
 plt.xlabel('Longitude')
 plt.ylabel('Latitude')
 
-# Colorbar
+# Colorbar with explicit axis specified
 sm = plt.cm.ScalarMappable(cmap='viridis', norm=norm)
 sm.set_array([])
-cbar = plt.colorbar(sm)
+cbar = plt.colorbar(sm, ax=plt.gca())  # Explicitly specify the axis using ax=plt.gca()
 cbar.set_label('Number of Deaths')
 
 plt.show()
@@ -175,10 +174,10 @@ scatter_generator = m.scatter(x, y, s=scatter_sizes, c=normalized_sizes, cmap='v
 plt.xlabel('Longitude')
 plt.ylabel('Latitude')
 
-# Colorbar
+# Colorbar with explicit axis specified
 sm = plt.cm.ScalarMappable(cmap='viridis', norm=norm)
 sm.set_array([])
-cbar = plt.colorbar(sm)
+cbar = plt.colorbar(sm, ax=plt.gca())  # Explicitly specify the axis using ax=plt.gca()
 cbar.set_label('Number of Deaths')
 
 plt.show()
