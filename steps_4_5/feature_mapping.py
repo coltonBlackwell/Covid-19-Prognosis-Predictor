@@ -47,7 +47,6 @@ cases_test['country_code'] = cases_test['country'].cat.codes
 #-----(BALANCE DATASET CLASSES USING UNDERSAMPLING)------  // If country code is -1, that means it is NULL
 
 
-# Define X and y
 X = cases_data.drop(['outcome_group'], axis=1)
 y = cases_data['outcome_group']
 
@@ -60,9 +59,7 @@ X_res, y_res = rus.fit_resample(X, y)
 # print("Balanced class after: ", y_res.value_counts()) IMPORTANT for report
 
 
-# Concatenate X_res and y_res column-wise
-
 resampled_data = pd.concat([X_res, pd.DataFrame(y_res, columns=['outcome_group'])], axis=1)
 resampled_data.to_csv('../dataset/subset/undersampled_processed_data.csv', index=False)  # Save resulting file to resampled_data.csv 
 
-#Use undersampled_processed_data.csv for your models in step 6 !!
+#Use undersampled_processed_data.csv for your models in step 6 !! (DONT NEED TO UNDERSAMPLE TEST DATASET)
