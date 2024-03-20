@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from imblearn.under_sampling import RandomUnderSampler # Make sure to run pip install -U imbalanced-learn to run
+from imblearn.over_sampling import RandomOverSampler # Make sure to run pip install -U imbalanced-learn to run
 
 cases_data = pd.read_csv('../data/cases_2021_train_processed_2 - cases_2021_train_processed_2.csv')
 cases_test = pd.read_csv('../data/cases_2021_test_processed_unlabelled_2 - cases_2021_test_processed_unlabelled_2.csv')
@@ -51,14 +51,14 @@ y = cases_data['outcome_group']
 
 # print("Imbalanced class before: ", y.value_counts())
 
-min_samples = min(cases_data['outcome_group'].value_counts())
-rus = RandomUnderSampler(sampling_strategy={'hospitalized': min_samples, 'nonhospitalized': min_samples, 'deceased': min_samples})
-X_res, y_res = rus.fit_resample(X, y)
+max_samples = max(cases_data['outcome_group'].value_counts())
+ros = RandomOverSampler(sampling_strategy={'hospitalized': max_samples, 'nonhospitalized': max_samples, 'deceased': max_samples})
+X_res, y_res = ros.fit_resample(X, y)
 
-# print("Balanced class after: ", y_res.value_counts()) IMPORTANT for report
+# print("Balanced class after: ", y_res.value_counts())
 
 
 resampled_data = pd.concat([X_res, pd.DataFrame(y_res, columns=['outcome_group'])], axis=1)
-resampled_data.to_csv('../result/undersampled_processed_data.csv', index=False)  # Save resulting file to resampled_data.csv 
+resampled_data.to_csv('../result/oversampled_processed_data.csv', index=False)  # Save resulting file to resampled_data.csv 
 
 #Use undersampled_processed_data.csv for your models in step 6 !! (DONT NEED TO UNDERSAMPLE TEST DATASET)
