@@ -7,7 +7,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix, accuracy_score
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
-cmap = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
+# cmap = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
 
 
 
@@ -47,9 +47,32 @@ predictions=model.predict(X_test)#our model's predictions
 # print(cm)
 print(accuracy_score(y_test, predictions))
 
-plt.figure()
-plt.scatter(X[:,2], X[:,3], c=y, cmap=cmap, edgecolors='k', s = 20)
+
+# Define colormap for classes
+cmap = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
+
+# Create 3D scatter plot
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection='3d')  # Adding 3D projection to the subplot
+
+# Scatter plot with 3D settings
+scatter = ax.scatter(X[:, 0], X[:, 1], X[:, 2], c=y, cmap=cmap, edgecolors='k', s=50, alpha=0.8)
+
+# Adding labels and title
+ax.set_xlabel('Feature 1')
+ax.set_ylabel('Feature 2')
+ax.set_zlabel('Feature 3')
+ax.set_title('3D Scatter Plot with Colored Classes')
+
+# Adding color bar
+plt.colorbar(scatter, ax=ax, label='Class')
+
+plt.tight_layout()
 plt.show()
+
+# plt.figure()
+# plt.scatter(X[:,2], X[:,3], c=y, cmap=cmap, edgecolors='k', s = 20)
+# plt.show()
 
 #**********************************************************
 
