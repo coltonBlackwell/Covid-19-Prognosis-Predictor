@@ -3,45 +3,64 @@ import numpy as np
 from imblearn.over_sampling import RandomOverSampler # Make sure to run pip install -U imbalanced-learn to run
 
 cases_data = pd.read_csv('../data/cases_2021_train_processed_2 - cases_2021_train_processed_2.csv')
-cases_test = pd.read_csv('../data/cases_2021_test_processed_unlabelled_2 - cases_2021_test_processed_unlabelled_2.csv')
+# cases_test = pd.read_csv('../data/cases_2021_test_processed_unlabelled_2 - cases_2021_test_processed_unlabelled_2.csv')
 
 
 #-----(CONVERTING SEX CATEGORICAL)------
 
 cases_data['sex'] = pd.Categorical(cases_data['sex'])
-cases_test['sex'] = pd.Categorical(cases_test['sex'])
+# cases_test['sex'] = pd.Categorical(cases_test['sex'])
 
 cases_data['sex_code'] = cases_data['sex'].cat.codes
-cases_test['sex_code'] = cases_test['sex'].cat.codes
+# cases_test['sex_code'] = cases_test['sex'].cat.codes
 
 #-----(CONVERTING CHRONIC_DISEASE_BINARY CATEGORICAL)------
 
 cases_data['chronic_disease_binary'] = pd.Categorical(cases_data['chronic_disease_binary'])
-cases_test['chronic_disease_binary'] = pd.Categorical(cases_test['chronic_disease_binary'])
+# cases_test['chronic_disease_binary'] = pd.Categorical(cases_test['chronic_disease_binary'])
 
 cases_data['chronic_disease_binary_code'] = cases_data['chronic_disease_binary'].cat.codes
-cases_test['chronic_disease_binary_code'] = cases_test['chronic_disease_binary'].cat.codes
+# cases_test['chronic_disease_binary_code'] = cases_test['chronic_disease_binary'].cat.codes
+
+
+#-----(CONVERTING PROVINCE CATEGORICAL)------  // If province code is -1, that means it is NULL
+
+cases_data['province'] = pd.Categorical(cases_data['province'])
+# cases_test['province'] = pd.Categorical(cases_test['province'])
+
+cases_data['province_code'] = cases_data['province'].cat.codes
+# cases_test['province_code'] = cases_test['province'].cat.codes
+
+#-----(CONVERTING COUNTRY CATEGORICAL)------  // If country code is -1, that means it is NULL
+
+cases_data['country'] = pd.Categorical(cases_data['country'])
+# cases_test['country'] = pd.Categorical(cases_test['country'])
+
+cases_data['country_code'] = cases_data['country'].cat.codes
+# cases_test['country_code'] = cases_test['country'].cat.codes
 
 #-----(CONVERTING OUTCOME_GROUP TO CATEGORICAL)------
 
 cases_data['outcome_group'] = pd.Categorical(cases_data['outcome_group'])
 cases_data['outcome_group_code'] = cases_data['outcome_group'].cat.codes
 
-#-----(CONVERTING PROVINCE CATEGORICAL)------  // If province code is -1, that means it is NULL
+#-----(Ensure all data types are numeric)---------------
 
-cases_data['province'] = pd.Categorical(cases_data['province'])
-cases_test['province'] = pd.Categorical(cases_test['province'])
+cases_data['age'] = pd.to_numeric(cases_data['age'], errors='coerce')
+cases_data['latitude'] = pd.to_numeric(cases_data['latitude'], errors='coerce')
+cases_data['longitude'] = pd.to_numeric(cases_data['longitude'], errors='coerce')
+cases_data['Confirmed'] = pd.to_numeric(cases_data['Confirmed'], errors='coerce')
+cases_data['Deaths'] = pd.to_numeric(cases_data['Deaths'], errors='coerce')
+cases_data['Recovered'] = pd.to_numeric(cases_data['Recovered'], errors='coerce')
+cases_data['Active'] = pd.to_numeric(cases_data['Active'], errors='coerce')
+cases_data['Incident_Rate'] = pd.to_numeric(cases_data['Incident_Rate'], errors='coerce')
+cases_data['Case_Fatality_Ratio'] = pd.to_numeric(cases_data['Case_Fatality_Ratio'], errors='coerce')
 
-cases_data['province_code'] = cases_data['province'].cat.codes
-cases_test['province_code'] = cases_test['province'].cat.codes
 
-#-----(CONVERTING COUNTRY CATEGORICAL)------  // If country code is -1, that means it is NULL
+#-----(REMOVING DATA CONFIRMATION)----------
 
-cases_data['country'] = pd.Categorical(cases_data['country'])
-cases_test['country'] = pd.Categorical(cases_test['country'])
+cases_data = cases_data.drop(columns=['date_confirmation'])
 
-cases_data['country_code'] = cases_data['country'].cat.codes
-cases_test['country_code'] = cases_test['country'].cat.codes
 
 #-----(BALANCE DATASET CLASSES USING UNDERSAMPLING)------  // If country code is -1, that means it is NULL
 
