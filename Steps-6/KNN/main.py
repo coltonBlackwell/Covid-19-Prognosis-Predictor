@@ -15,7 +15,7 @@ df = pd.read_csv("/home/colton/Documents/university/3rd Year/2nd Semester/CMPT 4
 
 df = df.drop(columns=['outcome_group', 'sex', 'province', 'country', 'chronic_disease_binary'])
 
-df = df[0:1000]
+# df = df[0:10000]
 
 X = df.iloc[:,:-1].values
 y = df.iloc[:, -1].values
@@ -32,19 +32,19 @@ X_test = sc.transform(X_test) #avoid data leakage
 
 
 
-model=KNN(5) #our model
+model=KNN(3) #our model
 model.fit(X_train,y_train)
 
-classifier = KNeighborsClassifier(n_neighbors = 5, metric = 'minkowski', p = 2)#The default metric is minkowski, and with p=2 is equivalent to the standard Euclidean metric.
-classifier.fit(X_train, y_train)
+# classifier = KNeighborsClassifier(n_neighbors = 5, metric = 'minkowski', p = 2)#The default metric is minkowski, and with p=2 is equivalent to the standard Euclidean metric.
+# classifier.fit(X_train, y_train)
 
-y_pred = classifier.predict(X_test)
+# y_pred = classifier.predict(X_test)
      
 
 predictions=model.predict(X_test)#our model's predictions
 
-cm = confusion_matrix(y_test, predictions) #our model
-print(cm)
+# cm = confusion_matrix(y_test, predictions) #our model
+# print(cm)
 print(accuracy_score(y_test, predictions))
 
 plt.figure()
