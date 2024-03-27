@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 from sklearn.utils import resample
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 # Load the datasets
 train_df = pd.read_csv('dataset/cases_2021_train.csv')
@@ -49,46 +52,6 @@ test_df['outcome_group'] = test_df.get('outcome').map(outcome_group_mapping) if 
 train_df_selected = train_df[selected_features + [outcome_feature]]
 test_df_selected = test_df[selected_features]
 
-# # Q5
-# # Iterate over each class and perform oversampling
-# # Start by keeping the original groups (classes) as is
-# lst = [train_df[train_df['outcome'] == class_index] for class_index in train_df['outcome'].unique()]
-# max_size = max(train_df['outcome'].value_counts())
-#
-# for class_index, group in train_df.groupby('outcome'):
-#     # Calculate how many samples are needed to balance this class
-#     n_samples_needed = max_size - len(group)
-#     # Only perform resampling if additional samples are needed
-#     if n_samples_needed > 0:
-#         resampled_group = resample(group, replace=True, n_samples=n_samples_needed, random_state=123)
-#         lst.append(resampled_group)
-#
-# balanced_df = pd.concat(lst)
-#
-# # Check the class distribution after balancing
-# print("Class distribution after balancing:\n", balanced_df['outcome'].value_counts())
-
-# # Display original class distribution for 'outcome_group'
-# print("Original 'outcome_group' distribution:\n", train_df['outcome_group'].value_counts())
-#
-# # Perform oversampling to balance the classes based on 'outcome_group'
-# lst = []  # Initialize an empty list to store the dataframe fragments
-# max_size = train_df['outcome_group'].value_counts().max()  # The size of the largest class
-#
-# for class_index, group in train_df.groupby('outcome_group'):
-#     n_samples_needed = max_size - len(group)  # Calculate the number of samples to replicate
-#     # Append the original group
-#     lst.append(group)
-#     # If additional samples are needed, perform resampling
-#     if n_samples_needed > 0:
-#         resampled_group = resample(group, replace=True, n_samples=n_samples_needed, random_state=123)
-#         lst.append(resampled_group)
-#
-# balanced_df = pd.concat(lst)  # Combine the original and resampled groups
-#
-# # Check the class distribution after balancing based on 'outcome_group'
-# print("Class distribution after balancing:\n", balanced_df['outcome_group'].value_counts())
-
 # Display the initial class distribution based on 'outcome_group'
 print("Original training dataset 'outcome_group' class distribution:")
 original_distribution = train_df['outcome_group'].value_counts()
@@ -114,3 +77,36 @@ balanced_train_df = pd.concat(oversampled_list)
 print("\nBalanced training dataset 'outcome_group' class distribution:")
 balanced_distribution = balanced_train_df['outcome_group'].value_counts()
 print(balanced_distribution)
+
+
+# Q6
+# Drop rows with missing values from both X and y
+train_df_clean = train_df[selected_features + [outcome_feature]].dropna()
+
+# Extract features (X) and target variable (y) after dropping missing values
+X = train_df_clean[selected_features]
+y = train_df_clean[outcome_feature]
+
+# Splitting the cleaned data into training and validation sets
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+# # Initialize the Logistic Regression model
+# model = LogisticRegression(max_iter=1000, random_state=42)
+# Initialize the Multinomial Logistic Regression model
+model = LogisticRegression(max_iter=1000, random_state=42, multi_class='multinomial', solver='lbfgs')
+
+# Train the model
+model.fit(X_train, y_train)
+
+# Predictions on the validation set
+y_pred = model.predict(X_val)
+
+# Evaluate the model
+accuracy = accuracy_score(y_val, y_pred)
+precision = precision_score(y_val, y_pred, average='weighted')
+recall = recall_score(y_val, y_pred, average='weighted')
+
+print(f"Accuracy: {accuracy}")
+print(f"Precision: {precision}")
+print(f"Recall: {recall}")
