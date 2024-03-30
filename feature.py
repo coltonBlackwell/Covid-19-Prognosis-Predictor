@@ -4,6 +4,9 @@ from sklearn.utils import resample
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline, Pipeline
+from sklearn.model_selection import GridSearchCV
 
 # Load the datasets
 train_df = pd.read_csv('dataset/cases_2021_train.csv')
@@ -110,3 +113,28 @@ recall = recall_score(y_val, y_pred, average='weighted')
 print(f"Accuracy: {accuracy}")
 print(f"Precision: {precision}")
 print(f"Recall: {recall}")
+
+# Set up the hyperparameter grid
+param_grid = {
+    'logisticregression__C': [0.01, 0.1, 1, 10, 100],
+    'logisticregression__solver': ['lbfgs', 'newton-cg', 'sag', 'saga']
+}
+
+# Create a pipeline including the scaler and the logistic regression model
+pipeline = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000, random_state=42, multi_class='multinomial'))
+
+# Initialize GridSearchCV
+grid_search = GridSearchCV(pipeline, param_grid, cv=5, scoring='accuracy')
+
+# Perform hyperparameter tuning and model training with grid search
+grid_search.fit(X_train, y_train)
+
+# Output the best hyperparameters and performance
+print("Best parameters:", grid_search.best_params_)
+print("Best cross-validation score:", grid_search.best_score_)
+
+# Evaluate the best model's performance on the validation dataset
+y_val_pred = grid_search.predict(X_val)
+val_accuracy = accuracy_score(y_val, y_val_pred)
+print("Validation set accuracy:", val_accuracy)
+
