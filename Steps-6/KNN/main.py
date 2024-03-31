@@ -1,9 +1,9 @@
 import pandas as pd
-import numpy as np
+# import numpy as np
 from KNN import KNN
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.neighbors import KNeighborsClassifier
+# from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix, accuracy_score
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
@@ -43,8 +43,8 @@ model.fit(X_train,y_train)
 
 predictions=model.predict(X_test)#our model's predictions
 
-# cm = confusion_matrix(y_test, predictions) #our model
-# print(cm)
+cm = confusion_matrix(y_test, predictions) #our model
+print(cm)
 print(accuracy_score(y_test, predictions))
 
 
@@ -69,28 +69,3 @@ plt.colorbar(scatter, ax=ax, label='Class')
 
 plt.tight_layout()
 plt.show()
-
-# plt.figure()
-# plt.scatter(X[:,2], X[:,3], c=y, cmap=cmap, edgecolors='k', s = 20)
-# plt.show()
-
-#**********************************************************
-
-
-
-# y = df['outcome_group_code']
-
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-
-# sc = StandardScaler()
-# X_train = sc.fit_transform(X_train)
-# X_test = sc.transform(X_test) #avoid data leakage
-
-
-# # print(y_train)
-
-# model = KNN(5)
-# model.fit(X_train, y_train)
-# predictions = model.predict(X_test)
-
-# # print(predictions)
