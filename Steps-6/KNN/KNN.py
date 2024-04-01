@@ -3,7 +3,6 @@ import numpy as np
 class KNN:
     def __init__(self, k):
         self.k = k
-        print(self.k)
 
     def fit(self, training_features, training_labels):
         self.training_features = training_features
@@ -23,9 +22,11 @@ class KNN:
         neighbors = [self.training_labels[i] for i in nearest_indices]
         return neighbors
     
-    def predict(self, test_set):
-        distances = np.array([self.euclideanDistance(self.training_features, test_sample) for test_sample in test_set])
-        nearest_indices = np.argsort(distances, axis=1)[:, :self.k]
-        neighbors = self.training_labels[nearest_indices]
-        predictions = np.argmax(np.apply_along_axis(lambda x: np.bincount(x, minlength=len(np.unique(self.training_labels))), axis=1, arr=neighbors), axis=1)
+    def predict(self,test_set):
+        predictions=[]
+        for test_sample in test_set:
+            neighbors=self.nearestNeighbors(test_sample)
+            labels=[sample for sample in neighbors]
+            prediction=max(labels,key=labels.count)
+            predictions.append(prediction)
         return predictions
