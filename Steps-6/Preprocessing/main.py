@@ -78,18 +78,19 @@ hyperparameter_tuning_data = hyperparameter_tuning_data.drop(columns=['date_conf
 X = hyperparameter_tuning_data.drop(['outcome'], axis=1)
 y = hyperparameter_tuning_data['outcome']
 
-print("Imbalanced class before: ", y.value_counts())
+# print("Imbalanced class before: ", y.value_counts())
 
 max_samples = max(hyperparameter_tuning_data['outcome'].value_counts())
 ros = RandomOverSampler(sampling_strategy={'Hospitalized': max_samples, 'Deceased': max_samples, 'Recovered': max_samples}) # Ignoring other outcomes as they are infinitly small comapred to these three
 X_res, y_res = ros.fit_resample(X, y)
 
-print("Balanced class after: ", y_res.value_counts())
+# print("Balanced class after: ", y_res.value_counts())
 
 
 # resampled_data = pd.concat([X_res, pd.DataFrame(y_res, columns=['outcome'])], axis=1)
 # X_res.to_csv('../hyperparameter_tuning_data/oversampled_processed_data.csv', index=False)  # Save resulting file to resampled_data.csv 
 
-X_res.to_csv('../hyperparameter_tuning_data/hyperparameter_tuning_data.csv', index=False)
+resampled_data = pd.concat([X_res, pd.DataFrame(y_res, columns=['outcome'])], axis=1)
+resampled_data.to_csv('../hyperparameter_tuning_data/hyperparameter_tuning_data.csv', index=False)
 
 # #Use undersampled_processed_data.csv for your models in step 6 !! (DONT NEED TO UNDERSAMPLE TEST DATASET)
