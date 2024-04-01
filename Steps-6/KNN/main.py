@@ -45,7 +45,7 @@ predictions=model.predict(X_test)#our model's predictions
 
 cm = confusion_matrix(y_test, predictions) #our model
 print(cm)
-print(accuracy_score(y_test, predictions))
+print(accuracy_score(y_test, predictions)) 
 
 
 # Define colormap for classes
