@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+from scipy.stats import randint
 
 # Below dataset for training KNN model
 
@@ -72,9 +73,11 @@ hyperParam_tuning = hyperParam_tuning.drop(columns=['sex', 'province', 'country'
 
 print(np.array(hyperParam_tuning).shape)
 
+# hyperParam_tuning = hyperParam_tuning[0:10000]
+
+
 X = hyperParam_tuning.iloc[:,:-1].values
 y = hyperParam_tuning.iloc[:, -1].values
-
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
@@ -101,3 +104,34 @@ plt.xlabel('K Value')
 plt.ylabel('Mean Error')
 plt.show()
 
+# --------------------------------------------------------------------- **
+
+# knn = KNN(3)
+
+# param_dist = {
+#     # 'k': [1,2,3,4,5,6,7,8,9,10]  # Example parameter range for KNN
+#     'k': randint(1,10)  # Example parameter range for KNN
+
+# }
+
+# # Create and fit GridSearchCV object
+# random_search = RandomizedSearchCV(estimator=knn, param_distributions=param_dist, cv=5, n_iter=5, random_state=0)
+# random_search.fit(X_train, y_train)
+
+# # Print best parameters and best score
+# print("Best Parameters:", random_search.best_params_)
+# print("Best Score (Accuracy):", random_search.best_score_)
+
+# ----------------------------------------------------------------- Works on small datasets
+
+# k = np.random.randint(1,2,30)
+
+# params = {'n_neighbours' : k}
+
+# random_search = RandomizedSearchCV(estimator=knn, param_distributions=params, n_iter=5, cv=5, random_state=0)
+# random_search.fit(X_train, y_train)
+
+# print("train score - " + str(random_search.score(X_train, y_train)))
+# print("test score - " + str(random_search.score(X_test, y_test)))
+
+# print(random_search.best_params_)

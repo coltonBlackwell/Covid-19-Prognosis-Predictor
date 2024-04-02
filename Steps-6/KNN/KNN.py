@@ -1,12 +1,15 @@
 import numpy as np
+from sklearn.metrics import accuracy_score
 
 class KNN:
     def __init__(self, k):
         self.k = k
+        self.training_features = None
+        self.training_labels = None
 
-    def fit(self, training_features, training_labels):
-        self.training_features = training_features
-        self.training_labels = training_labels
+    def fit(self, X, y):
+        self.training_features = X
+        self.training_labels = y
 
     def euclideanDistance(self, sample1, sample2):
         diff = sample1 - sample2
@@ -22,7 +25,7 @@ class KNN:
         neighbors = [self.training_labels[i] for i in nearest_indices]
         return neighbors
     
-    def predict(self,test_set):
+    def predict(self, test_set):
         predictions=[]
         for test_sample in test_set:
             neighbors=self.nearestNeighbors(test_sample)
@@ -30,3 +33,14 @@ class KNN:
             prediction=max(labels,key=labels.count)
             predictions.append(prediction)
         return predictions
+    
+    def score(self, X, y):
+        predictions = self.predict(X)
+        return accuracy_score(y, predictions)
+    
+    def get_params(self, deep=True):
+        return {'k': self.k}
+    
+    def set_params(self, **params):
+        self.k = params['k']
+        return self
