@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 from KNN import KNN
-from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV
+from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV, KFold
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+from sklearn.metrics import confusion_matrix, accuracy_score, f1_score, classification_report
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from scipy.stats import randint
@@ -73,7 +73,7 @@ hyperParam_tuning = hyperParam_tuning.drop(columns=['sex', 'province', 'country'
 
 print(np.array(hyperParam_tuning).shape)
 
-# hyperParam_tuning = hyperParam_tuning[0:10000]
+# hyperParam_tuning = hyperParam_tuning[0:20000]
 
 
 X = hyperParam_tuning.iloc[:,:-1].values
@@ -104,7 +104,53 @@ plt.xlabel('K Value')
 plt.ylabel('Mean Error')
 plt.show()
 
-# --------------------------------------------------------------------- **
+# --------------------------------------------------------------------- GRID SEARCH CV (WORKS!!)
+
+# Define the KNN classifier with a fixed k value of 3
+knn = KNN(3)
+
+# Define the parameter grid for grid search
+param_grid = {
+    'k': range(1, 5)  # Example parameter range for KNN
+}
+
+# k_fold = KFold(n_splits=4, shuffle=True, random_state=0)
+
+# Create and fit GridSearchCV object
+grid_search = GridSearchCV(estimator=knn, param_grid=param_grid, cv=4, scoring='f1_macro')
+grid_search.fit(X_train, y_train)
+
+# Print best parameters and best score
+print("Best Parameters:", grid_search.best_params_)
+print("Best Score (Accuracy):", grid_search.best_score_)
+
+# --------------------------------------------------------------------------------------------below is new
+
+
+# Save results to a .txt file (replace 'results_knn.txt' with your desired file name)
+with open('results_knn.txt', 'w') as file:
+    file.write(str(grid_search.cv_results_))
+
+# Print best parameters and corresponding performance metrics
+print("Best Parameters:", grid_search.best_params_)
+print("Mean macro F1-score across validation sets:", grid_search.best_score_)
+
+# Evaluate the best model on test data (replace X_test, y_test with your actual test data)
+best_model = grid_search.best_estimator_
+y_pred = best_model.predict(X_test)
+macro_f1 = f1_score(y_test, y_pred, average='macro')
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Mean macro F1-score on test data:", macro_f1)
+print("Mean overall accuracy on test data:", accuracy)
+
+
+
+# -----------------------------------------------------------------
+
+
+
+# --------------------------------------------------------------------- RANDOM SEARCH CV
 
 # knn = KNN(3)
 
@@ -122,16 +168,5 @@ plt.show()
 # print("Best Parameters:", random_search.best_params_)
 # print("Best Score (Accuracy):", random_search.best_score_)
 
-# ----------------------------------------------------------------- Works on small datasets
+# -----------------------------------------------------------------
 
-# k = np.random.randint(1,2,30)
-
-# params = {'n_neighbours' : k}
-
-# random_search = RandomizedSearchCV(estimator=knn, param_distributions=params, n_iter=5, cv=5, random_state=0)
-# random_search.fit(X_train, y_train)
-
-# print("train score - " + str(random_search.score(X_train, y_train)))
-# print("test score - " + str(random_search.score(X_test, y_test)))
-
-# print(random_search.best_params_)
