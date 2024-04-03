@@ -64,7 +64,7 @@ ax.set_title('3D Scatter Plot with Colored Classes')
 plt.colorbar(scatter, ax=ax, label='Class')
 
 plt.tight_layout()
-plt.show()
+# plt.show()
 
 # --------------------------------------------------------------------- Hyperparameter tuning
 
@@ -73,11 +73,13 @@ hyperParam_tuning = hyperParam_tuning.drop(columns=['sex', 'province', 'country'
 
 print(np.array(hyperParam_tuning).shape)
 
-# hyperParam_tuning = hyperParam_tuning[0:20000]
+# hyperParam_tuning = hyperParam_tuning[23519:33519]
+
 
 
 X = hyperParam_tuning.iloc[:,:-1].values
 y = hyperParam_tuning.iloc[:, -1].values
+
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
@@ -102,7 +104,7 @@ plt.plot(range(1,10), error, color='red', linestyle='dashed', marker='o',
 plt.title("Error rate for K value")
 plt.xlabel('K Value')
 plt.ylabel('Mean Error')
-plt.show()
+# plt.show()
 
 # --------------------------------------------------------------------- GRID SEARCH CV (WORKS!!)
 
@@ -114,10 +116,10 @@ param_grid = {
     'k': range(1, 5)  # Example parameter range for KNN
 }
 
-# k_fold = KFold(n_splits=4, shuffle=True, random_state=0)
+k_fold = KFold(n_splits=4, shuffle=True, random_state=0)
 
 # Create and fit GridSearchCV object
-grid_search = GridSearchCV(estimator=knn, param_grid=param_grid, cv=4, scoring='f1_macro')
+grid_search = GridSearchCV(estimator=knn, param_grid=param_grid, cv=k_fold, scoring='f1_macro')
 grid_search.fit(X_train, y_train)
 
 # Print best parameters and best score
@@ -131,19 +133,19 @@ print("Best Score (Accuracy):", grid_search.best_score_)
 with open('results_knn.txt', 'w') as file:
     file.write(str(grid_search.cv_results_))
 
-# Print best parameters and corresponding performance metrics
-print("Best Parameters:", grid_search.best_params_)
-print("Mean macro F1-score across validation sets:", grid_search.best_score_)
-
 # Evaluate the best model on test data (replace X_test, y_test with your actual test data)
 best_model = grid_search.best_estimator_
 y_pred = best_model.predict(X_test)
+
+macro_f1_test = f1_score(y_test, y_pred, average='macro', labels=[1], zero_division=1)
+
+
 macro_f1 = f1_score(y_test, y_pred, average='macro')
 accuracy = accuracy_score(y_test, y_pred)
 
+print("DECEASED:", macro_f1_test)
 print("Mean macro F1-score on test data:", macro_f1)
 print("Mean overall accuracy on test data:", accuracy)
-
 
 
 # -----------------------------------------------------------------
