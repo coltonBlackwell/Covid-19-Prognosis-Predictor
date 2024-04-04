@@ -68,7 +68,7 @@ plt.tight_layout()
 
 # --------------------------------------------------------------------- Hyperparameter tuning
 
-hyperParam_tuning = pd.read_csv("/home/colton/Documents/university/3rd Year/2nd Semester/CMPT 459/Assignments/CMPT459-Final-Group-Project/Steps-6/hyperparameter_tuning_data/hyperparameter_tuning_data.csv")
+hyperParam_tuning = pd.read_csv("/home/colton/Documents/university/3rd Year/2nd Semester/CMPT 459/Assignments/CMPT459-Final-Group-Project/Steps-6/data/hyperparameter_tuning_data/hyperparameter_tuning_data.csv")
 hyperParam_tuning = hyperParam_tuning.drop(columns=['sex', 'province', 'country', 'chronic_disease_binary', 'Combined_Key', 'outcome'])
 
 print(np.array(hyperParam_tuning).shape)
@@ -108,6 +108,13 @@ plt.ylabel('Mean Error')
 
 # --------------------------------------------------------------------- GRID SEARCH CV (WORKS!!)
 
+target_class_label = 1
+
+x_filtered = X[y == target_class_label]
+y_filtered = y[y == target_class_label]
+
+
+
 # Define the KNN classifier with a fixed k value of 3
 knn = KNN(3)
 
@@ -119,8 +126,8 @@ param_grid = {
 k_fold = KFold(n_splits=4, shuffle=True, random_state=0)
 
 # Create and fit GridSearchCV object
-grid_search = GridSearchCV(estimator=knn, param_grid=param_grid, cv=k_fold, scoring='f1_macro')
-grid_search.fit(X_train, y_train)
+grid_search = GridSearchCV(estimator=knn, param_grid=param_grid, cv=k_fold, scoring='f1')
+grid_search.fit(x_filtered, y_filtered)
 
 # Print best parameters and best score
 print("Best Parameters:", grid_search.best_params_)
@@ -137,38 +144,15 @@ with open('results_knn.txt', 'w') as file:
 best_model = grid_search.best_estimator_
 y_pred = best_model.predict(X_test)
 
-macro_f1_test = f1_score(y_test, y_pred, average='macro', labels=[1], zero_division=1)
+# macro_f1_test = f1_score(y_test, y_pred, average='macro', labels=[1], zero_division=1)
 
 
-macro_f1 = f1_score(y_test, y_pred, average='macro')
-accuracy = accuracy_score(y_test, y_pred)
+# macro_f1 = f1_score(y_test, y_pred, average='macro')
+# accuracy = accuracy_score(y_test, y_pred)
 
-print("DECEASED:", macro_f1_test)
-print("Mean macro F1-score on test data:", macro_f1)
-print("Mean overall accuracy on test data:", accuracy)
+# print("DECEASED:", macro_f1_test)
+# print("Mean macro F1-score on test data:", macro_f1)
+# print("Mean overall accuracy on test data:", accuracy)
 
 
 # -----------------------------------------------------------------
-
-
-
-# --------------------------------------------------------------------- RANDOM SEARCH CV
-
-# knn = KNN(3)
-
-# param_dist = {
-#     # 'k': [1,2,3,4,5,6,7,8,9,10]  # Example parameter range for KNN
-#     'k': randint(1,10)  # Example parameter range for KNN
-
-# }
-
-# # Create and fit GridSearchCV object
-# random_search = RandomizedSearchCV(estimator=knn, param_distributions=param_dist, cv=5, n_iter=5, random_state=0)
-# random_search.fit(X_train, y_train)
-
-# # Print best parameters and best score
-# print("Best Parameters:", random_search.best_params_)
-# print("Best Score (Accuracy):", random_search.best_score_)
-
-# -----------------------------------------------------------------
-
