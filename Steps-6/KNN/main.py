@@ -10,7 +10,7 @@ from scipy.stats import randint
 
 # Below dataset for training KNN model
 
-df = pd.read_csv("/home/colton/Documents/university/3rd Year/2nd Semester/CMPT 459/Assignments/CMPT459-Final-Group-Project/Steps-4-5/result/oversampled_processed_data.csv")
+df = pd.read_csv("/home/colton/Documents/university/3rd Year/2nd Semester/CMPT 459/Assignments/COPY COPY/CMPT459-Final-Group-Project/Steps-4-5/result/oversampled_processed_data.csv")
 df = df.drop(columns=['outcome_group', 'sex', 'province', 'country', 'chronic_disease_binary'])
 
 df = df[0:10000]
@@ -68,13 +68,12 @@ plt.tight_layout()
 
 # --------------------------------------------------------------------- Hyperparameter tuning
 
-hyperParam_tuning = pd.read_csv("/home/colton/Documents/university/3rd Year/2nd Semester/CMPT 459/Assignments/CMPT459-Final-Group-Project/Steps-6/data/hyperparameter_tuning_data/hyperparameter_tuning_data.csv")
+hyperParam_tuning = pd.read_csv("/home/colton/Documents/university/3rd Year/2nd Semester/CMPT 459/Assignments/COPY COPY/CMPT459-Final-Group-Project/Steps-6/data/hyperparameter_tuning_data/hyperparameter_tuning_data.csv")
 hyperParam_tuning = hyperParam_tuning.drop(columns=['sex', 'province', 'country', 'chronic_disease_binary', 'Combined_Key', 'outcome'])
 
 print(np.array(hyperParam_tuning).shape)
 
-# hyperParam_tuning = hyperParam_tuning[23519:33519]
-
+# hyperParam_tuning = hyperParam_tuning[33519:43519]
 
 
 X = hyperParam_tuning.iloc[:,:-1].values
@@ -108,10 +107,10 @@ plt.ylabel('Mean Error')
 
 # --------------------------------------------------------------------- GRID SEARCH CV (WORKS!!)
 
-target_class_label = 1
+# target_class_label = 1
 
-x_filtered = X[y == target_class_label]
-y_filtered = y[y == target_class_label]
+# x_filtered = X[y == target_class_label]
+# y_filtered = y[y == target_class_label]
 
 
 
@@ -120,14 +119,14 @@ knn = KNN(3)
 
 # Define the parameter grid for grid search
 param_grid = {
-    'k': range(1, 5)  # Example parameter range for KNN
+    'k': range(3, 7)  # Example parameter range for KNN
 }
 
 k_fold = KFold(n_splits=4, shuffle=True, random_state=0)
 
 # Create and fit GridSearchCV object
-grid_search = GridSearchCV(estimator=knn, param_grid=param_grid, cv=k_fold, scoring='f1')
-grid_search.fit(x_filtered, y_filtered)
+grid_search = GridSearchCV(estimator=knn, param_grid=param_grid, cv=k_fold, scoring='f1_macro')
+grid_search.fit(X_train, y_train)
 
 # Print best parameters and best score
 print("Best Parameters:", grid_search.best_params_)
@@ -137,7 +136,7 @@ print("Best Score (Accuracy):", grid_search.best_score_)
 
 
 # Save results to a .txt file (replace 'results_knn.txt' with your desired file name)
-with open('results_knn.txt', 'w') as file:
+with open('results_knn_NEW.txt', 'w') as file:
     file.write(str(grid_search.cv_results_))
 
 # Evaluate the best model on test data (replace X_test, y_test with your actual test data)
@@ -147,12 +146,12 @@ y_pred = best_model.predict(X_test)
 # macro_f1_test = f1_score(y_test, y_pred, average='macro', labels=[1], zero_division=1)
 
 
-# macro_f1 = f1_score(y_test, y_pred, average='macro')
-# accuracy = accuracy_score(y_test, y_pred)
+macro_f1 = f1_score(y_test, y_pred, average='macro')
+accuracy = accuracy_score(y_test, y_pred)
 
 # print("DECEASED:", macro_f1_test)
-# print("Mean macro F1-score on test data:", macro_f1)
-# print("Mean overall accuracy on test data:", accuracy)
+print("Mean macro F1-score on test data:", macro_f1)
+print("Mean overall accuracy on test data:", accuracy)
 
 
 # -----------------------------------------------------------------

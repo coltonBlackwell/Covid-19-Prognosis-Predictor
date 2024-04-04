@@ -43,6 +43,27 @@ cases_test = cases_test[(cases_test['latitude'] >= -90) & (cases_test['latitude'
 # - Remove if province is unknown - The long and lat is missing
 location_data = location_data.dropna(subset=['Lat', 'Long_'], how='any')
 
+# Assuming cases_data is your DataFrame with the 'outcome_group' column and you've applied the mapping
+outcome_group_mapping = {
+    'Deceased': 0,
+    'dies': 0,
+    'died': 0,
+    'death': 0,
+    'Hospitalized': 1,
+    'Alive': 1,
+    'stable': 1,
+    'stable condition': 1,
+    'Recovered': 2,
+    'recovered': 2,
+    'discharge': 2,
+    'discharged': 2
+}
+
+cases_data['outcome_group_code'] = cases_data['outcome'].map(outcome_group_mapping)
+
+# Get the count of each label in the 'outcome_group_code' column
+label_counts = cases_data['outcome_group_code'].value_counts()
+
 
 #----------- (JOINING DATASETS)-----------
 

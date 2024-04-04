@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 from imblearn.over_sampling import RandomOverSampler # Make sure to run pip install -U imbalanced-learn to run
 
-cases_data = pd.read_csv('../data/cases_2021_train_processed_2 - cases_2021_train_processed_2.csv')
-# cases_test = pd.read_csv('../data/cases_2021_test_processed_unlabelled_2 - cases_2021_test_processed_unlabelled_2.csv')
+cases_data = pd.read_csv('../data/cases_2021_train_processed_2.csv')
+# cases_test = pd.read_csv('../data/cases_2021_test_processed_unlabelled_2.csv')
 
 
 #-----(CONVERTING SEX CATEGORICAL)------
