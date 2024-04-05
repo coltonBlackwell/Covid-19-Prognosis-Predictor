@@ -11,7 +11,7 @@ import numpy as np
 from imblearn.over_sampling import RandomOverSampler # Make sure to run pip install -U imbalanced-learn to run
 
 
-hyperparameter_tuning_data = pd.read_csv('/home/colton/Documents/university/3rd Year/2nd Semester/CMPT 459/Assignments/CMPT459-Final-Group-Project/Steps-1-2-3/results/case_train_processed.csv')
+hyperparameter_tuning_data = pd.read_csv('../../Steps-1-2-3/results/case_train_processed.csv')
 
 # #-----(DROPPING UNNECESSARY COLUMNS)------
 
@@ -91,6 +91,6 @@ X_res, y_res = ros.fit_resample(X, y)
 # X_res.to_csv('../hyperparameter_tuning_data/oversampled_processed_data.csv', index=False)  # Save resulting file to resampled_data.csv 
 
 resampled_data = pd.concat([X_res, pd.DataFrame(y_res, columns=['outcome'])], axis=1)
-resampled_data.to_csv('../hyperparameter_tuning_data/hyperparameter_tuning_data.csv', index=False)
+resampled_data.to_csv('../data/hyperparameter_tuning_data/hyperparameter_tuning_data.csv', index=False)
 
 # #Use undersampled_processed_data.csv for your models in step 6 !! (DONT NEED TO UNDERSAMPLE TEST DATASET)
