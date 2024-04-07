@@ -147,7 +147,7 @@ hyperParam_tuning = pd.read_csv("hyperparameter_tuning_data.csv")
 hyperParam_tuning = hyperParam_tuning.drop(columns=['sex', 'province', 'country', 'chronic_disease_binary', 'Combined_Key', 'outcome'])
 
 # Define K-fold cross-validation (K=5)
-kfold = KFold(n_splits=9, shuffle=True, random_state=42)
+kfold = KFold(n_splits=5, shuffle=True, random_state=42)
 
 hyperParam_tuning = hyperParam_tuning[33519:43519]
 
@@ -158,6 +158,10 @@ y = hyperParam_tuning.iloc[:, -1].values
 
 # Initialize lists to store accuracy scores for each fold
 accuracy_scores = []
+# Initialize lists to store F1-scores for each fold
+f1_scores = []
+# Initialize lists to store F1-scores for 'deceased' class for each fold
+f1_deceased_scores = []
 
 # Perform K-fold cross-validation
 for train_index, val_index in kfold.split(X_train):
@@ -175,9 +179,24 @@ for train_index, val_index in kfold.split(X_train):
     accuracy_fold = accuracy_score(y, y_pred_fold)
     accuracy_scores.append(accuracy_fold)
 
+    # Calculate F1-score on the validation fold
+    f1_fold = f1_score(y, y_pred_fold, average='macro')
+    f1_scores.append(f1_fold)
+
+    # Calculate F1-score for 'deceased' class on the validation fold
+    f1_deceased_fold = f1_score(y, y_pred_fold, average=None)[0]  # Assuming 'deceased' is the first class
+    f1_deceased_scores.append(f1_deceased_fold)
+
 # Calculate mean accuracy across all folds
 mean_accuracy = np.mean(accuracy_scores)
+# Calculate mean macro F1-score across all folds
+mean_macro_f1 = np.mean(f1_scores)
+# Calculate mean F1-score for 'deceased' class across all folds
+mean_f1_deceased = np.mean(f1_deceased_scores)
 
+
+print("Mean F1-score on 'deceased' across 5 folds:", mean_f1_deceased)
+print("Mean macro F1-score across 5 folds:", mean_macro_f1)
 print("Mean accuracy across 9 folds:", mean_accuracy) 
 #Mean accuracy across 5 folds: 0.8359
 #Mean accuracy across 9 folds: 0.8359 //why same value
