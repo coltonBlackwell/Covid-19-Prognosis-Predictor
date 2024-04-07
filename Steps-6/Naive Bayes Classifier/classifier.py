@@ -14,6 +14,8 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay,
     f1_score,
 )
+from matplotlib.colors import ListedColormap
+from sklearn.model_selection import KFold
 
 # Importing the dataset
 dataset = pd.read_csv('oversampled_processed_data.csv')
@@ -68,3 +70,114 @@ print("F1 Score:", f1)
 # converted = float(input_string[0])
 
 # print(converted) # 3.1417
+
+
+
+
+# --------------------------------------------------------------------- Visualizing Naive_Bayes model
+
+
+# Define colormap for classes
+cmap = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
+
+# Create 3D scatter plot
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection='3d')  # Adding 3D projection to the subplot
+
+# Scatter plot with 3D settings
+scatter = ax.scatter(X[:, 0], X[:, 1], X[:, 1], c=y, cmap=cmap, edgecolors='k', s=50, alpha=0.8)
+
+# Adding labels and title
+ax.set_xlabel('Age')
+ax.set_ylabel('Country')
+ax.set_zlabel('Outcome Group')
+ax.set_title('3D Scatter Plot with Colored Classes')
+
+# Adding color bar
+plt.colorbar(scatter, ax=ax, label='Class')
+
+plt.tight_layout()
+# plt.show()
+
+
+# --------------------------------------------------------------------- Hyperparameter tuning
+
+hyperParam_tuning = pd.read_csv("hyperparameter_tuning_data.csv")
+hyperParam_tuning = hyperParam_tuning.drop(columns=['sex', 'province', 'country', 'chronic_disease_binary', 'Combined_Key', 'outcome'])
+
+print(np.array(hyperParam_tuning).shape)
+
+hyperParam_tuning = hyperParam_tuning[33519:43519]
+
+
+X = hyperParam_tuning.iloc[:,:-1].values
+y = hyperParam_tuning.iloc[:, -1].values
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+
+error = []
+
+for i in range(1, 10):
+    naive = GaussianNB()
+    naive.fit(X_train, y_train)
+    predictions=naive.predict(X_test)#our model's predictions
+    error.append(np.mean(predictions != y_test))
+
+
+cm = confusion_matrix(y_test, predictions) #our model
+print("confusion matrix: ", cm)
+print("accuracy score: ",accuracy_score(y_test, predictions)) 
+
+plt.figure(figsize=(12,8))
+plt.plot(range(1,10), error, color='red', linestyle='dashed', marker='o',
+         markerfacecolor='blue', markersize=10)
+plt.title("Error rate for K value")
+plt.xlabel('K Value')
+plt.ylabel('Mean Error')
+# plt.show()
+
+
+
+# --------------------------------------------------------------------- Kfold 
+
+
+hyperParam_tuning = pd.read_csv("hyperparameter_tuning_data.csv")
+hyperParam_tuning = hyperParam_tuning.drop(columns=['sex', 'province', 'country', 'chronic_disease_binary', 'Combined_Key', 'outcome'])
+
+# Define K-fold cross-validation (K=5)
+kfold = KFold(n_splits=9, shuffle=True, random_state=42)
+
+hyperParam_tuning = hyperParam_tuning[33519:43519]
+
+
+X = hyperParam_tuning.iloc[:,:-1].values
+y = hyperParam_tuning.iloc[:, -1].values
+
+
+# Initialize lists to store accuracy scores for each fold
+accuracy_scores = []
+
+# Perform K-fold cross-validation
+for train_index, val_index in kfold.split(X_train):
+
+    x = hyperParam_tuning.iloc[:,:-1].values
+    y = hyperParam_tuning.iloc[:, -1].values
+
+    # Fit the classifier on the training fold
+    model.fit(x, y)
+    
+    # Predict on the validation fold
+    y_pred_fold = model.predict(x)
+    
+    # Calculate accuracy on the validation fold
+    accuracy_fold = accuracy_score(y, y_pred_fold)
+    accuracy_scores.append(accuracy_fold)
+
+# Calculate mean accuracy across all folds
+mean_accuracy = np.mean(accuracy_scores)
+
+print("Mean accuracy across 9 folds:", mean_accuracy) 
+#Mean accuracy across 5 folds: 0.8359
+#Mean accuracy across 9 folds: 0.8359 //why same value
