@@ -1,0 +1,4 @@
+{'mean_fit_time': array([0.00024837, 0.00021476, 0.00023443, 0.00020665]), 'std_fit_time': array([8.16846156e-05, 2.60200730e-05, 3.68525931e-05, 7.66354421e-06]), 'mean_score_time': array([1.06966776, 1.07473278, 1.07141906, 1.07696885]), 'std_score_time': array([0.00592566, 0.00557645, 0.00659399, 0.00805368]), 'param_k': masked_array(data=[3, 4, 5, 6],
+             mask=[False, False, False, False],
+       fill_value='?',
+            dtype=object), 'params': [{'k': 3}, {'k': 4}, {'k': 5}, {'k': 6}], 'split0_test_score': array([0.99 , 0.99 , 0.991, 0.99 ]), 'split1_test_score': array([0.991, 0.991, 0.991, 0.991]), 'split2_test_score': array([0.988 , 0.988 , 0.9875, 0.988 ]), 'split3_test_score': array([0.9865, 0.9865, 0.985 , 0.9865]), 'mean_test_score': array([0.988875, 0.988875, 0.988625, 0.988875]), 'std_test_score': array([0.00174553, 0.00174553, 0.00253414, 0.00174553]), 'rank_test_score': array([1, 1, 4, 1], dtype=int32)}
