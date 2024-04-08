@@ -86,30 +86,30 @@ def evaluate_model(X_train, y_train, X_val, y_val, model):
 
 
 
-# --------------------------------------------------------------------- Visualizing Naive_Bayes model
+# # --------------------------------------------------------------------- Visualizing Naive_Bayes model
 
 
-# Define colormap for classes
-cmap = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
+# # Define colormap for classes
+# cmap = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
 
-# Create 3D scatter plot
-fig = plt.figure(figsize=(10, 8))
-ax = fig.add_subplot(111, projection='3d')  # Adding 3D projection to the subplot
+# # Create 3D scatter plot
+# fig = plt.figure(figsize=(10, 8))
+# ax = fig.add_subplot(111, projection='3d')  # Adding 3D projection to the subplot
 
-# Scatter plot with 3D settings
-scatter = ax.scatter(X[:, 0], X[:, 1], X[:, 1], c=y, cmap=cmap, edgecolors='k', s=50, alpha=0.8)
+# # Scatter plot with 3D settings
+# scatter = ax.scatter(X[:, 0], X[:, 1], X[:, 1], c=y, cmap=cmap, edgecolors='k', s=50, alpha=0.8)
 
-# Adding labels and title
-ax.set_xlabel('Age')
-ax.set_ylabel('Country')
-ax.set_zlabel('Outcome Group')
-ax.set_title('3D Scatter Plot with Colored Classes')
+# # Adding labels and title
+# ax.set_xlabel('Age')
+# ax.set_ylabel('Country')
+# ax.set_zlabel('Outcome Group')
+# ax.set_title('3D Scatter Plot with Colored Classes')
 
-# Adding color bar
-plt.colorbar(scatter, ax=ax, label='Class')
+# # Adding color bar
+# plt.colorbar(scatter, ax=ax, label='Class')
 
-plt.tight_layout()
-# plt.show()
+# plt.tight_layout()
+# # plt.show()
 
 
 # --------------------------------------------------------------------- Hyperparameter tuning
@@ -221,9 +221,17 @@ for train_index, val_index in kfold.split(X_train):
     f1_deceased_fold = f1_score(y, y_pred_fold, average=None)[0]  # Assuming 'deceased' is the first class
     f1_deceased_scores.append(f1_deceased_fold)
 
+  
     # Evaluate the model on the current fold
     train_accuracy, val_accuracy, train_f1_macro, val_f1_macro = evaluate_model(
             X_train_fold, y_train_fold, X_val_fold, y_val_fold, model)
+    
+      # Append scores to lists
+    train_accuracy_scores.append(train_accuracy)
+    val_accuracy_scores.append(val_accuracy)
+    train_f1_macro_scores.append(train_f1_macro)
+    val_f1_macro_scores.append(val_f1_macro)
+
 
 
 # Calculate mean accuracy across all folds
